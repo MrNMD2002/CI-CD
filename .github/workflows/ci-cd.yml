@@ -35,7 +35,7 @@ jobs:
             - name: Build Docker Image
               run: docker build -t ci-cd-demo:latest .
             - name: List Docker Images
-              run: docker images | grep cicd-demo
+              run: docker images -a | grep "cicd-demo"
     deploy:
         name: Deploy to localhost
         runs-on: self-hosted
