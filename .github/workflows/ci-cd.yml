@@ -33,9 +33,7 @@ jobs:
               uses: actions/checkout@v4
             
             - name: Build Docker Image
-              run: |
-                docker build -t ci-cd-demo:latest .
-                docker tag ci-cd-demo:latest cicd-demo: ${{github.sha}}
+              run: docker build -t ci-cd-demo:latest .
             - name: List Docker Images
               run: docker images | grep cicd-demo
     deploy:
@@ -47,8 +45,7 @@ jobs:
         steps:
             - name: stop old container
               run: |
-                 docker stop $(docker ps -a) || true
-                 docker rm $(docker ps -a) || true
+                 docker stop python-app || true
             - name: start new container
               run: |
                  docker run -d --name python-app -p 5001:5001 --restart unless-stopped cicd-demo:latest
