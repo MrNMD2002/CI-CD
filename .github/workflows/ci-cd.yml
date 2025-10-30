@@ -46,7 +46,7 @@ jobs:
                  docker stop python-app || true
             - name: start new container
               run: |
-                 docker run -d --name python-app -p 5001:5001 --restart unless-stopped cicd-demo:latest
+                 docker run -d --name python-app -p 5001:5001 --restart unless-stopped ci-cd-demo:latest
             - name: check deployment
               run: |
                 sleep 10
