@@ -1,6 +1,5 @@
-# CI Pipeline - github-runner-demo
+# CI Pipeline -- github-runner-demo
 # Uses GitHub Self-hosted Runner for automated build and testing
-
 name: CI Pipeline with Self-hosted Runner
 
 on:
@@ -32,11 +31,13 @@ jobs:
       - name: Install linting tools
         run: |
           python -m pip install --upgrade pip
-          python -m pip install flake8
+          pip install flake8
 
       - name: Run flake8 linter
         run: |
-          python -m flake8 src/ tests/ --max-line-length=120 --statistics
+          # Check for syntax errors and code style
+          # --max-line-length=120: allows lines up to 120 characters
+          flake8 src/ tests/ --max-line-length=120 --statistics
 
   # JOB 2: Run Unit Tests
   run-tests:
@@ -56,15 +57,18 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
+          pip install -r requirements.txt
 
       - name: Run tests with coverage report
         run: |
-          python -m pytest tests/ -v --cov=src --cov-report=term-missing --cov-report=xml:coverage.xml
+          pytest tests/ -v \
+            --cov=src \
+            --cov-report=term-missing \
+            --cov-report=xml:coverage.xml
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
-        if: always()
+        if: always() # Upload even if tests fail
         with:
           name: coverage-report
           path: coverage.xml
@@ -74,19 +78,19 @@ jobs:
     name: Build Summary
     runs-on: self-hosted
     needs: [lint-and-format, run-tests]
-    if: always()
+    if: always() # Always runs to summarize results
 
     steps:
       - name: Print success message
         if: needs.run-tests.result == 'success'
         run: |
           echo '================================'
-          echo '  CI PIPELINE PASSED!'
-          echo '  Ready to deploy to production.'
+          echo ' CI PIPELINE PASSED!'
+          echo ' Ready to deploy to production.'
           echo '================================'
 
       - name: Print failure message
         if: needs.run-tests.result == 'failure'
         run: |
-          echo '  CI PIPELINE FAILED!'
-          echo '  Check logs to identify errors.'
+          echo ' CI PIPELINE FAILED!'
+          echo ' Check logs to identify errors.'
