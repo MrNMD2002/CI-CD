@@ -9,10 +9,6 @@ on:
     branches: [ main ]
   workflow_dispatch: # Allow manual run from GitHub UI
 
-defaults:
-  run:
-    shell: bash
-
 jobs:
   # JOB 1: Code quality check
   lint-and-format:
@@ -26,13 +22,11 @@ jobs:
       - name: Install linting tools
         run: |
           python -m pip install --upgrade pip
-          pip install flake8
+          python -m pip install flake8
 
       - name: Run flake8 linter
         run: |
-          # Check for syntax errors and code style
-          # --max-line-length=120: allows lines up to 120 characters
-          flake8 src/ tests/ --max-line-length=120 --statistics
+          python -m flake8 src/ tests/ --max-line-length=120 --statistics
 
   # JOB 2: Run Unit Tests
   run-tests:
@@ -47,14 +41,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          python -m pip install -r requirements.txt
 
       - name: Run tests with coverage report
-        run: |
-          pytest tests/ -v \
-            --cov=src \
-            --cov-report=term-missing \
-            --cov-report=xml:coverage.xml
+        run: python -m pytest tests/ -v --cov=src --cov-report=term-missing --cov-report=xml:coverage.xml
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
