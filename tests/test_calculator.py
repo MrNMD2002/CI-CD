@@ -69,13 +69,13 @@ class TestOtherOperations:
         assert calc.power(999, 0) == 1
 
     def test_is_positive_true(self, calc):
-        assert calc.is_positive(5) == True
+        assert calc.is_positive(5) is True
 
     def test_is_positive_false(self, calc):
-        assert calc.is_positive(-1) == False
+        assert calc.is_positive(-1) is False
 
     def test_is_positive_zero(self, calc):
-        assert calc.is_positive(0) == False
+        assert calc.is_positive(0) is False
 
 
 # Square root tests
