@@ -1,6 +1,6 @@
 # CI Pipeline -- github-runner-demo
-# Uses GitHub Self-hosted Runner for automated build and testing
-name: CI Pipeline with Self-hosted Runner
+# Uses GitHub-hosted Runner for automated build and testing
+name: CI Pipeline with GitHub-hosted Runner
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
   # JOB 1: Code quality check
   lint-and-format:
     name: Code Quality Check
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout source code
@@ -31,7 +31,7 @@ jobs:
   # JOB 2: Run Unit Tests
   run-tests:
     name: Run Unit Tests
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: lint-and-format # Only runs after lint succeeds
 
     steps:
@@ -57,7 +57,7 @@ jobs:
   # JOB 3: Build Summary
   build-summary:
     name: Build Summary
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: [lint-and-format, run-tests]
     if: always() # Always runs to summarize results
 
